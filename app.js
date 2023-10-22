@@ -1,5 +1,5 @@
 document.querySelector('form').addEventListener('submit', function(e) {
-  e.preventDefault(); // Evita que el formulario se envíe de la manera predeterminada
+  e.preventDefault();
 
   var agendadoresAutorizados = {
     'pedro': 'pedro.age.1',
@@ -11,34 +11,36 @@ document.querySelector('form').addEventListener('submit', function(e) {
   var contrasenaIngresada = document.getElementById('contrasena').value;
 
   if (agendadoresAutorizados[nombreIngresado] === contrasenaIngresada) {
-    var cancha = document.getElementById('cancha').value;
+    var cancha = document.getElementById('cancha');
+    var canchaValor = cancha.value;
+    var canchaNombre = cancha.options[cancha.selectedIndex].text; // Obtén el nombre de la cancha desde el HTML
     var fecha = document.getElementById('fecha').value;
     var hora = document.getElementById('hora').value;
     var reservas = JSON.parse(localStorage.getItem('reservas')) || {};
 
-    if (reservas[cancha] && reservas[cancha][fecha] && reservas[cancha][fecha][hora]) {
-      swal("Hora no disponible", "Ya existe una reserva para esta cancha y hora. Comentarios: " + reservas[cancha][fecha][hora].comentarios); // Muestra una alerta de error
+    if (reservas[canchaValor] && reservas[canchaValor][fecha] && reservas[canchaValor][fecha][hora]) {
+      swal("Hora no disponible", "Ya existe una reserva para " + canchaNombre + " y hora. Comentarios: " + reservas[canchaValor][fecha][hora].comentarios);
     } else {
       var datosFormulario = {
         agendador: nombreIngresado,
-        cancha: cancha,
+        cancha: canchaNombre,
         fecha: fecha,
         hora: hora,
         comentarios: document.getElementById('comentarios').value
       };
 
-      if (!reservas[cancha]) {
-        reservas[cancha] = {};
+      if (!reservas[canchaValor]) {
+        reservas[canchaValor] = {};
       }
-      if (!reservas[cancha][fecha]) {
-        reservas[cancha][fecha] = {};
+      if (!reservas[canchaValor][fecha]) {
+        reservas[canchaValor][fecha] = {};
       }
-      reservas[cancha][fecha][hora] = datosFormulario;
+      reservas[canchaValor][fecha][hora] = datosFormulario;
       localStorage.setItem('reservas', JSON.stringify(reservas));
 
-      swal("Agendamiento completado", JSON.stringify(datosFormulario, null, 2)); // Muestra los datos en una alerta personalizada
+      swal("Agendamiento completado", JSON.stringify(datosFormulario, null, 2));
     }
   } else {
-    swal("Usuario no autorizado", "No tienes permiso para realizar esta acción."); // Muestra una alerta de error
+    swal("Usuario no autorizado", "No tienes permiso para realizar esta acción.");
   }
 });
