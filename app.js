@@ -2,9 +2,9 @@ document.querySelector('form').addEventListener('submit', function(e) {
   e.preventDefault(); // Evita que el formulario se envíe de la manera predeterminada
 
   var agendadoresAutorizados = {
-    'Agendador1': 'Contraseña1',
-    'Agendador2': 'Contraseña2',
-    'Agendador3': 'Contraseña3'
+    'pedro': 'pedro.age.1',
+    'juan': 'juan.age.2',
+    'diego': 'diego.age.3'
   };
 
   var nombreIngresado = document.getElementById('nombre').value;
@@ -17,7 +17,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
     var reservas = JSON.parse(localStorage.getItem('reservas')) || {};
 
     if (reservas[cancha] && reservas[cancha][fecha] && reservas[cancha][fecha][hora]) {
-      swal("Hora no disponible", "Ya existe una reserva para esta cancha y hora."); // Muestra una alerta de error
+      swal("Hora no disponible", "Ya existe una reserva para esta cancha y hora. Comentarios: " + reservas[cancha][fecha][hora].comentarios); // Muestra una alerta de error
     } else {
       var datosFormulario = {
         agendador: nombreIngresado,
